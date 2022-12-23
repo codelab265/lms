@@ -24,5 +24,8 @@ class Reservation extends Model
         return $this->belongsTo(User::class);
     }
 
-    
+    public function fines_payment()
+    {
+        return $this->hasOne(FinesPayment::class, 'reservation_id');
+    }
 }

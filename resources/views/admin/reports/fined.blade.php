@@ -61,6 +61,7 @@
                                 <th>Title</th>
                                 <th>Issuer's Name</th>
                                 <th>Course</th>
+                                <th>Status</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
@@ -83,21 +84,32 @@
                                     </td>
                                     <td>
                                         @if ($reservation->user->role == 3)
-                                        <span class="text-warning">N/A</span>
+                                            <span class="text-warning">N/A</span>
                                         @else
                                             {{ $reservation->user->studentDetail->course }}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($reservation->fines_payment)
+                                            <span class="text-success">
+                                                PAID
+                                            </span>
+                                        @else
+                                            <span>
+                                                <span class="text-danger">
+                                                    NOT PAID
+                                                </span>
+                                            </span>
                                         @endif
                                     </td>
                                     <td>
                                         {{ number_format($reservation->fine, 1) }}
                                     </td>
 
-
-
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="5" style="text-align: right; font-weight:bolder">
+                                <td colspan="6" style="text-align: right; font-weight:bolder">
                                     <span>TOTAL</span>
                                 </td>
                                 <th>
