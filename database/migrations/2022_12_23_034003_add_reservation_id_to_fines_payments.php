@@ -14,7 +14,7 @@ class AddReservationIdToFinesPayments extends Migration
     public function up()
     {
         Schema::table('fines_payments', function (Blueprint $table) {
-            //
+            $table->foreignId('reservation_id')->unsigned()->nullable()->references('id')->on('reservations')->cascadeOnDelete();
         });
     }
 

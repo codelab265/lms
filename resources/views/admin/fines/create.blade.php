@@ -3,7 +3,7 @@
     <form enctype="multipart/form-data" class="needs-validation" action="{{ route('admin.finespayments') }}" method="post"
         novalidate>
         @csrf
-        <div class="modal-dialog modal-md">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myExtraLargeModalLabel">Add Book </h5>
@@ -17,13 +17,29 @@
                             <div class="form-group">
                                 <label for="user_id">Borrower's name</label>
                                 <select class="form-control" name="user_id" id="user_id" required>
+                                    <option value="">Select member</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">
                                             {{ $user->studentDetail->fname }} {{ $user->studentDetail->lname }}
                                         </option>
                                     @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="reservation_id">Reservation</label>
+                                <select class="form-control" name="reservation_id" id="reservation_id">
 
                                 </select>
+                                <small id="helpId" class="text-muted">
+                                    The reservation that needed to be paid for
+                                </small>
                             </div>
                         </div>
 

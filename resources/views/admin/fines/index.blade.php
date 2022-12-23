@@ -83,3 +83,26 @@
         </div> <!-- end col -->
     </div>
 @endsection
+@push('script')
+    <script>
+        $('body').on('change', '#user_id', function() {
+            var user_id = $(this).val();
+            if (user_id == "") {
+                return false
+            } else {
+                $.ajax({
+                    type: "get",
+                    url: "{{ route('admin.fines.reservation') }}",
+                    data: {
+                        id: user_id
+                    },
+
+                    success: function(response) {
+                        $('#reservation_id').html(response.html)
+                    }
+                });
+
+            }
+        })
+    </script>
+@endpush

@@ -114,6 +114,7 @@ Route::group(
         //fines payment routes
         Route::get('fines-payments', [FinesController::class, 'index'])->name('finespayments');
         Route::post('fines-payments', [FinesController::class, 'store']);
+        Route::get('fines-payment/reservation', [FinesController::class, 'reservation'])->name('fines.reservation');
         //returned books routes
         Route::get('returned', [AdminReturnController::class, 'index'])->name(
             'returned'
