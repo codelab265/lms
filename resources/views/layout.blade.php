@@ -30,7 +30,6 @@
     <link href="{{ asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css') }}" rel="stylesheet"
         type="text/css" />
 
-
     <link href="{{ asset('assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
 
     <!-- Responsive datatable examples -->
@@ -165,7 +164,6 @@
                         </div>
                     </div>
 
-
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item right-bar-toggle me-2">
                             <i data-feather="settings" class="icon-lg"></i>
@@ -259,9 +257,21 @@
                             </li>
 
                             <li>
+                                <a href="{{ route('admin.finespayments') }}">
+                                    <i data-feather="help-circle"></i>
+                                    <span data-key="t-reservation">Fines Payment</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{ route('admin.requests') }}">
                                     <i data-feather="help-circle"></i>
                                     <span data-key="t-reservation">Request</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.lostbooks') }}">
+                                    <i data-feather="help-circle"></i>
+                                    <span data-key="t-reservation">Lost</span>
                                 </a>
                             </li>
                             <li>
@@ -277,7 +287,6 @@
                                     <span data-key="t-reservation">Returned Books</span>
                                 </a>
                             </li>
-
 
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">

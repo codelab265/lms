@@ -13,7 +13,9 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminRequestController;
 use App\Http\Controllers\Admin\AdminReturnController;
+use App\Http\Controllers\Admin\LostController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\FinesController;
 use App\Http\Controllers\Member\MemberBorrowedController;
 use App\Http\Controllers\Member\ReservationController;
 use App\Http\Controllers\ProfileController;
@@ -105,6 +107,13 @@ Route::group(
             'borrowed'
         );
 
+        //lost books routes
+        Route::get('lost-books', [LostController::class, 'index'])->name('lostbooks');
+        Route::post('lost-books', [LostController::class, 'store']);
+
+        //fines payment routes
+        Route::get('fines-payments', [FinesController::class, 'index'])->name('finespayments');
+        Route::post('fines-payments', [FinesController::class, 'store']);
         //returned books routes
         Route::get('returned', [AdminReturnController::class, 'index'])->name(
             'returned'
