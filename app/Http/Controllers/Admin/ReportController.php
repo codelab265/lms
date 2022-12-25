@@ -320,4 +320,13 @@ class ReportController extends Controller
             compact('reservations', 'period')
         );
     }
+
+    public function filter_history(Request $request)
+    {
+        $access_number = $request->access_number;
+        $reservations = Reservation::where('access_number', $access_number)->groupBy('user_id')->get();
+
+        $html = view('admin.reports.filtered_books', compact('access_number', 'reservations'))->render();
+        return response()->json($html);
+    }
 }

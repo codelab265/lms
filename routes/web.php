@@ -166,6 +166,7 @@ Route::group(
             ReportController::class,
             'borrowing',
         ])->name('report.borrowing');
+        Route::get('report/book-history/filter', [ReportController::class, 'filter_history'])->name('filter.book.history');
     }
 );
 

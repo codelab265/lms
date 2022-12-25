@@ -53,27 +53,6 @@
                     <h4 class="mb-sm-0 font-size-25">{{ $period }} Report</h4>
                     <hr>
 
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="card bg-warning">
-                                <div class="card-body">
-                                    <h3>TOP STUDENT</h3>
-                                    <p>Mike</p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card bg-info">
-                                <div class="card-body">
-                                    <h3>TOP FACULTY</h3>
-                                    <p>Mike</p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
                         <thead>
                             <tr>

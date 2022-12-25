@@ -46,8 +46,12 @@
                             <i class="fa fa-print"></i>
                             Print
                         </a>
+                        <a name="" class="btn btn-primary float-right" data-bs-toggle="modal" href="#filter">
+                            <i class="fa fa-filter"></i>
+                            Filter
+                        </a>
                     </div>
-
+                    @include('admin.reports.filter_history')
                 </div>
                 <div class="card-body" id="printableArea">
                     <h4 class="mb-sm-0 font-size-25">{{ $period }} Report</h4>
@@ -66,7 +70,6 @@
                                 <th>Date Issued</th>
                                 <th>Date Returned ||</th>
 
-
                             </tr>
                         </thead>
                         <tbody>
@@ -76,7 +79,7 @@
                                     <td>{{ $book->access_number }}</td>
                                     <td>{{ $book->call_number }}</td>
                                     <td>{{ $book->book_title }}</td>
-                                     <td>{{ $book->author }}</td>
+                                    <td>{{ $book->author }}</td>
 
                                     <td>
                                         @if ($book->role == 2)
@@ -91,12 +94,12 @@
                                         @if ($book->role == 2)
                                             {{ $book->course }}
                                         @else
-                                             {{ $book->course }}
-                                             <span class="text-warning">N/A</span>
+                                            {{ $book->course }}
+                                            <span class="text-warning">N/A</span>
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($book->returned_date == NULL)
+                                        @if ($book->returned_date == null)
                                             <span class="text-danger">
                                                 Not Returned
                                             </span>
@@ -108,20 +111,19 @@
                                     </td>
 
                                     <td>
-                                        @if($book->role == 3)
-                                        {{ date('d-F-Y', strtotime($book->created_at)) }}
+                                        @if ($book->role == 3)
+                                            {{ date('d-F-Y', strtotime($book->created_at)) }}
                                         @else
-                                        {{ date('d-F-Y', strtotime($book->created_at)) }}
+                                            {{ date('d-F-Y', strtotime($book->created_at)) }}
                                         @endif
                                     </td>
                                     <td>
 
-                                        @if($book->returned_date == NULL)
-                                        <h2 style="color:yellow">Pending</h2>
-
+                                        @if ($book->returned_date == null)
+                                            <h2 style="color:yellow">Pending</h2>
                                         @elseif($book->status == 3)
-                                            {{ date('d-F-Y', strtotime($book->returned_date))}}
-                                         @endif
+                                            {{ date('d-F-Y', strtotime($book->returned_date)) }}
+                                        @endif
 
                                     </td>
                                     {{-- <td class="text-info">
@@ -138,7 +140,6 @@
                                         @endif
                                     </td> --}}
 
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -149,3 +150,25 @@
         </div> <!-- end col -->
     </div>
 @endsection
+@push('script')
+    <script>
+        $('body').on('click', '#filter_button', function() {
+            var accessNumber = $('#access_number').val();
+            if (accessNumber == "") {
+                alert('Access number is required');
+            } else {
+                $.ajax({
+                    type: "get",
+                    url: "{{ route('admin.filter.book.history') }}",
+                    data: {
+                        access_number: accessNumber
+                    },
+
+                    success: function(response) {
+                        $('#results_container').html(response);
+                    }
+                });
+            }
+        });
+    </script>
+@endpush
