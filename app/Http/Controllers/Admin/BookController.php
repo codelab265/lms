@@ -19,6 +19,7 @@ class BookController extends Controller
         $borrowed = Reservation::where('status', 1)->count();
         $returned = Reservation::where('status', 3)->count();
         $notReturned = $borrowed - $returned;
+        $reservations = Reservation::groupBy('user_id')->get();
 
         return view(
             'admin.books.index',
@@ -27,7 +28,8 @@ class BookController extends Controller
                 'books',
                 'borrowed',
                 'returned',
-                'notReturned'
+                'notReturned',
+                'reservations'
             )
         );
     }
@@ -93,7 +95,8 @@ class BookController extends Controller
     }
 
 
-    public function get_books(Request $request){
+    public function get_books(Request $request)
+    {
         $data = [];
         $search = '';
         $category_id = '';
@@ -116,7 +119,8 @@ class BookController extends Controller
             ->get();
         return response()->json($data, 200);
     }
-    public function get_author(Request $request){
+    public function get_author(Request $request)
+    {
         $data = [];
         $search = '';
         $category_id = '';

@@ -363,6 +363,14 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{ route('members.payment.history') }}">
+                                    <i data-feather="list"></i>
+                                    <span data-key="t-reservation">
+                                        Payment History
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{ route('members.borrowed') }}">
                                     <i data-feather="book"></i>
                                     <span data-key="t-reservation">My Borrowed Books</span>

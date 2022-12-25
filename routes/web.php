@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\LostController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\FinesController;
 use App\Http\Controllers\Member\MemberBorrowedController;
+use App\Http\Controllers\Member\PaymentHistoryController;
 use App\Http\Controllers\Member\ReservationController;
 use App\Http\Controllers\ProfileController;
 
@@ -181,6 +182,7 @@ Route::group(
             'index',
         ])->name('reservation');
         Route::post('reservation', [ReservationController::class, 'store']);
+        Route::get('payment-history', [PaymentHistoryController::class, 'index'])->name('payment.history');
 
         Route::get('borrowed-books', [MemberBorrowedController::class, 'index'])->name('borrowed');
     }
