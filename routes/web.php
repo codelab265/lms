@@ -167,6 +167,8 @@ Route::group(
             'borrowing',
         ])->name('report.borrowing');
         Route::get('report/book-history/filter', [ReportController::class, 'filter_history'])->name('filter.book.history');
+
+        Route::get('fines-payments/filter', [FinesController::class, 'filter'])->name('fines-payment.filter');
     }
 );
 

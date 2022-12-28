@@ -14,10 +14,16 @@ class LostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('date')) {
+            $lost_books = LostBook::whereDate('created_at', $request->date)->get();
+        } else {
+            $lost_books = LostBook::all();
+        }
+
         $users = User::where('role', 2)->get();
-        $lost_books = LostBook::all();
+
 
         return view('admin.lost.index', compact('users', 'lost_books'));
     }

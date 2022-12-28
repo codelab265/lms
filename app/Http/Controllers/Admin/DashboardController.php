@@ -27,6 +27,13 @@ class DashboardController extends Controller
             $course[] = $graphData->course;
             $total[] = $graphData->total;
         }
+        $users = User::whereIn('id', function ($q) {
+            $q->select('user_id')->from('reservations');
+        })->get();
+
+        foreach ($users as $user) {
+            Reservation::where('user_id', $user->id)->update(['role' => $user->role]);
+        }
         return view(
             'admin.dashboard.index',
             compact(

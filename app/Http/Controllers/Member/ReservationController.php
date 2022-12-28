@@ -25,7 +25,7 @@ class ReservationController extends Controller
                 );
         }
         $reservations = Reservation::where('user_id', Auth::id())
-                                    ->where('status', 1)->get();
+            ->where('status', 1)->get();
         $categories = Category::all();
         return view(
             'members.books.index',
@@ -37,12 +37,12 @@ class ReservationController extends Controller
     {
 
         $validate = $request->validate(['user_id' => [
-            function($attribute, $value, $fail){
+            function ($attribute, $value, $fail) {
                 $returned_books = ReturnedBook::where('user_id', $value)->pluck('reservation_id')->all();
-                if(Reservation::where('user_id', $value)
+                if (Reservation::where('user_id', $value)
                     ->whereNotIn('id', $returned_books)
                     ->exists()
-                ){
+                ) {
                     $fail('You Have Unreturned book Yet you cannot make a request as of now, Please return the first Thank You. ');
                 }
             }
@@ -56,9 +56,10 @@ class ReservationController extends Controller
             'book_id',
             'access_number'
         );
+        $data['role'] = Auth::user()->role;
 
-        if(Auth::user()->role <> 3){
-	        $data['return_date'] = Carbon::now()->addDays(7);
+        if (Auth::user()->role <> 3) {
+            $data['return_date'] = Carbon::now()->addDays(7);
         }
 
         $data['status'] = 1; //auto reserved upon request

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class ReportController extends Controller
 {
 
-    public function books_history($period)
+    public function books_history(Request $request, $period)
     {
         $now = Carbon::now();
         $query = DB::table('reservations as re')
@@ -44,10 +44,14 @@ class ReportController extends Controller
         } elseif ($period == 'monthly') {
             $books = $query->whereMonth('re.updated_at', date('m'))->get();
             $period = 'Monthly';
-        } else {
+        } elseif ($period == 'semester') {
             $books = $query->whereYear('re.updated_at', date('Y'))
                 ->get();
             $period = 'Semeter';
+        } else {
+            $books = $query->whereDate('re.created_at', $request->date)
+                ->get();
+            $period = $request->date;
         }
         return view(
             'admin.reports.books_history',
@@ -55,7 +59,7 @@ class ReportController extends Controller
         );
     }
 
-    public function added_books($period)
+    public function added_books(Request $request, $period)
     {
         $now = Carbon::now();
 
@@ -68,15 +72,19 @@ class ReportController extends Controller
         } elseif ($period == 'monthly') {
             $books = Book::whereMonth('created_at', date('m'))->get();
             $period = 'Monthly';
-        } else {
+        } elseif ($period == 'semester') {
             $books = Book::whereYear('created_at', date('Y'))->get();
             $period = 'Semester';
+        } else {
+            $books = Book::whereDate('created_at', $request->date)
+                ->get();
+            $period = $request->date;
         }
 
         return view('admin.reports.added_books', compact('books', 'period'));
     }
 
-    public function updated_books($period)
+    public function updated_books(Request $request, $period)
     {
         $now = Carbon::now();
 
@@ -89,22 +97,26 @@ class ReportController extends Controller
         } elseif ($period == 'monthly') {
             $books = Book::whereMonth('updated_at', date('m'))->get();
             $period = 'Monthly';
-        } else {
+        } elseif ($period == 'semester') {
             $books = Book::whereYear('updated_at', date('Y'))->get();
-            $period = 'Semeter';
+            $period = 'Semester';
+        } else {
+            $books = Book::whereDate('updated_at', $request->date)
+                ->get();
+            $period = $request->date;
         }
 
         return view('admin.reports.updated_books', compact('books', 'period'));
     }
 
-    public function inventory($period)
+    public function inventory(Request $request, $period)
     {
         $now = Carbon::now();
 
         if ($period == 'weekly') {
             $reservations = Reservation::where('status', 1)
                 ->orWhere('status', 3)
-                ->whereBetween('updated_at', [
+                ->whereBetween('created_at', [
                     $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                     $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
                 ])
@@ -113,15 +125,21 @@ class ReportController extends Controller
         } elseif ($period == 'monthly') {
             $reservations = Reservation::where('status', 1)
                 ->orWhere('status', 3)
-                ->whereMonth('updated_at', date('m'))
+                ->whereMonth('created_at', date('m'))
                 ->get();
             $period = 'Monthly';
+        } elseif ($period == 'semester') {
+            $reservations = Reservation::where('status', 1)
+                ->orWhere('status', 3)
+                ->whereYear('created_at', date('Y'))
+                ->get();
+            $period = 'Semeter';
         } else {
             $reservations = Reservation::where('status', 1)
                 ->orWhere('status', 3)
-                ->whereYear('updated_at', date('Y'))
+                ->whereDate('created_at', $request->date)
                 ->get();
-            $period = 'Semeter';
+            $period = $request->date;
         }
 
         return view(
@@ -130,7 +148,7 @@ class ReportController extends Controller
         );
     }
 
-    public function issued_books($period)
+    public function issued_books(Request $request, $period)
     {
         $now = Carbon::now();
 
@@ -151,14 +169,23 @@ class ReportController extends Controller
             })->whereMonth('updated_at', date('m'))
                 ->get();
             $period = 'Monthly';
-        } else {
+        } elseif ($period == 'semester') {
             $reservations = Reservation::where(function ($q) {
                 $q->where('status', 1);
                 $q->orWhere('status', 3);
             })->whereYear('updated_at', date('Y'))
                 ->get();
             $period = 'Semeter';
+        } else {
+            $reservations = Reservation::where(function ($q) {
+                $q->where('status', 1);
+                $q->orWhere('status', 3);
+            })->whereDate('created_at', $request->date)
+                ->get();
+
+            $period = $request->date;
         }
+
 
         return view(
             'admin.reports.issued_books',
@@ -166,7 +193,7 @@ class ReportController extends Controller
         );
     }
 
-    public function returned_books($period)
+    public function returned_books(Request $request, $period)
     {
         $now = Carbon::now();
         $returned_books = ReturnedBook::pluck('reservation_id')->all();
@@ -185,13 +212,20 @@ class ReportController extends Controller
                 ->whereMonth('updated_at', date('m'))
                 ->get();
             $period = 'Monthly';
-        } else {
+        } elseif ($period == "semester") {
             $reservations = Reservation::where('status', 3)
                 ->whereIn('id', $returned_books)
                 ->whereYear('updated_at', date('Y'))
                 ->get();
             $period = 'Semeter';
+        } else {
+            $reservations = Reservation::where('status', 3)
+                ->whereIn('id', $returned_books)
+                ->whereDate('created_at', $request->date)
+                ->get();
+            $period = $request->date;
         }
+
 
         return view(
             'admin.reports.returned_books',
@@ -199,7 +233,7 @@ class ReportController extends Controller
         );
     }
 
-    public function unreturned_books($period)
+    public function unreturned_books(Request $request, $period)
     {
         $now = Carbon::now();
         $returned_books = ReturnedBook::pluck('reservation_id')->all();
@@ -218,12 +252,18 @@ class ReportController extends Controller
                 ->whereMonth('updated_at', date('m'))
                 ->get();
             $period = 'Monthly';
-        } else {
+        } elseif ($period == 'semester') {
             $reservations = Reservation::where('status', 3)
                 ->whereNotIn('id', $returned_books)
                 ->whereYear('updated_at', date('Y'))
                 ->get();
             $period = 'Semeter';
+        } else {
+            $reservations = Reservation::where('status', 3)
+                ->whereNotIn('id', $returned_books)
+                ->whereDate('created_at', $request->date)
+                ->get();
+            $period = $request->date;
         }
 
         return view(
@@ -232,7 +272,7 @@ class ReportController extends Controller
         );
     }
 
-    public function fined($period)
+    public function fined(Request $request, $period)
     {
         $now = Carbon::now();
 
@@ -251,18 +291,24 @@ class ReportController extends Controller
                 ->whereMonth('updated_at', date('m'))
                 ->get();
             $period = 'Monthly';
-        } else {
+        } elseif ($period == 'semester') {
             $reservations = Reservation::where('status', 3)
                 ->where('is_fined', 1)
                 ->whereYear('updated_at', date('Y'))
                 ->get();
             $period = 'Semeter';
+        } else {
+            $reservations = Reservation::where('status', 3)
+                ->where('is_fined', 1)
+                ->whereDate('updated_at', $request->date)
+                ->get();
+            $period = $request->date;
         }
 
         return view('admin.reports.fined', compact('reservations', 'period'));
     }
 
-    public function profile($period)
+    public function profile(Request $request, $period)
     {
         $now = Carbon::now();
 
@@ -275,15 +321,18 @@ class ReportController extends Controller
         } elseif ($period == 'monthly') {
             $users = User::whereMonth('created_at', date('m'))->get();
             $period = 'Monthly';
-        } else {
+        } elseif ($period == 'semester') {
             $users = User::whereYear('created_at', date('Y'))->get();
             $period = 'Semeter';
+        } else {
+            $users = User::whereDate('created_at', $request->date)->get();
+            $period = $request->date;
         }
 
         return view('admin.reports.profile', compact('users', 'period'));
     }
 
-    public function borrowing($period)
+    public function borrowing(Request $request, $period)
     {
         $now = Carbon::now();
 
@@ -305,7 +354,7 @@ class ReportController extends Controller
                 ->get();
 
             $period = 'Monthly';
-        } else {
+        } elseif ($period == 'semester') {
             $reservations = Reservation::select('user_id', DB::raw('count(*) as total'))->groupBy('user_id')
                 ->orderByRaw('COUNT(*) DESC')
                 ->whereIn('status', [1, 3])
@@ -313,6 +362,14 @@ class ReportController extends Controller
                 ->get();
 
             $period = 'Semeter';
+        } else {
+            $reservations = Reservation::select('user_id', DB::raw('count(*) as total'))->groupBy('user_id')
+                ->orderByRaw('COUNT(*) DESC')
+                ->whereIn('status', [1, 3])
+                ->whereDate('created_at', $request->date)
+                ->get();
+
+            $period = $request->date;
         }
 
         return view(

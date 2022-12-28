@@ -31,4 +31,11 @@ class FinesController extends Controller
 
         return response()->json(['html' => $html]);
     }
+
+    public function filter(Request $request)
+    {
+        $users = User::where('role', 2)->get();
+        $fines_payments = FinesPayment::whereDate('created_at', $request->date)->get();
+        return view('admin.fines.index', compact('fines_payments', 'users'));
+    }
 }

@@ -8,7 +8,14 @@ File: Datatables Js File
 
 $(document).ready(function() {
     $('#datatable').DataTable({
-        'ordering':false
+        'ordering':false,
+        buttons: [
+            {
+                extend: 'print',
+                text: 'Print current page',
+                autoPrint: false
+            }
+        ]
     });
 
     //Buttons examples

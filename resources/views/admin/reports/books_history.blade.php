@@ -40,7 +40,15 @@
                                 class="btn btn-danger waves-effect btn-label waves-light">
                                 Semester
                             </a>
+                            <form action="{{ route('admin.report.books_history', ['period' => 'date']) }}" method="GET"
+                                id="date_range_form">
+                                <input class="form-control" type="date" id="date_range" style="width: 150px"
+                                    name="date">
+                            </form>
                         </div>
+
+                    </div>
+                    <div class="float-end">
                         <a name="" onclick="Print();" class="btn btn-secondary float-right" href="#"
                             role="button">
                             <i class="fa fa-print"></i>
@@ -169,6 +177,11 @@
                     }
                 });
             }
+        });
+
+        $('body').on('change', '#date_range', function() {
+            var date = $(this).val();
+            $('#date_range_form').submit();
         });
     </script>
 @endpush

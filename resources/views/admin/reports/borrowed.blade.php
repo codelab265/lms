@@ -40,13 +40,17 @@
                                 class="btn btn-danger waves-effect btn-label waves-light">
                                 Semester
                             </a>
+                            <form action="{{ route('admin.report.borrowing', ['period' => 'date']) }}" method="GET"
+                                id="date_range_form">
+                                <input class="form-control" type="date" id="date_range" style="width: 150px"
+                                    name="date">
+                            </form>
                         </div>
-                        <a name="" onclick="Print();" class="btn btn-secondary float-right" href="#"
-                            role="button">
-                            <i class="fa fa-print"></i>
-                            Print
-                        </a>
                     </div>
+                    <a name="" onclick="Print();" class="btn btn-secondary float-end" href="#" role="button">
+                        <i class="fa fa-print"></i>
+                        Print
+                    </a>
 
                 </div>
                 <div class="card-body" id="printableArea">
@@ -82,3 +86,11 @@
         </div> <!-- end col -->
     </div>
 @endsection
+@push('script')
+    <script>
+        $('body').on('change', '#date_range', function() {
+            var date = $(this).val();
+            $('#date_range_form').submit();
+        });
+    </script>
+@endpush

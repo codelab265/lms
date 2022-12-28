@@ -24,16 +24,31 @@
             <div class="card">
                 <div class="card-header">
 
-                    <div class="btn-group">
-                        <a class="btn btn-primary" data-bs-toggle="modal" href="#add">
-                            <i class="fa fa-plus"></i>
-                            Add
-                        </a>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-primary" data-bs-toggle="modal" href="#add">
+                                    <i class="fa fa-plus"></i>
+                                    Add
+                                </a>
+                                <a class="btn btn-outline-primary" onclick="Print()">
+                                    <i class="fa fa-print"></i>
+                                    Print
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <form action="{{ route('admin.fines-payment.filter') }}" method="GET" id="date_range_form">
+                                <input class="form-control" type="date" id="date_range" style="width: 150px"
+                                    name="date">
+                            </form>
+                        </div>
                     </div>
 
                     @include('admin.fines.create')
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="printableArea">
 
                     <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
                         <thead>
@@ -102,6 +117,13 @@
                     }
                 });
 
+            }
+        })
+
+        $('body').on('change', '#date_range', function() {
+            var date = $(this).val();
+            if (date != "") {
+                $('#date_range_form').submit();
             }
         })
     </script>
