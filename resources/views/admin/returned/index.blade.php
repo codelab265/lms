@@ -65,33 +65,29 @@
 
                                     <td>
                                         @if ($reservation->user->role == 3)
-                                        <span class="text-warning">N/A</span>
+                                            <span class="text-warning">N/A</span>
                                         @else
-                                        {{ date('d-F-Y', strtotime($reservation->returned_date)) }}
+                                            {{ date('d-F-Y', strtotime($reservation->returned_date)) }}
                                         @endif
 
                                     </td>
 
-
                                     <td>
                                         @if ($reservation->user->role == 3)
-                                        <span class="text-warning">N/A</span>
-                                        @else {{--ARI SUGOD CONDTIONS--}}
+                                            <span class="text-warning">N/A</span>
+                                        @else
+                                            {{-- ARI SUGOD CONDTIONS --}}
                                             @php
                                                 $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $reservation->returned_date . ' 00:00:00');
                                                 $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $reservation->return_date . ' 00:00:00');
                                                 $diff_in_days = $to->diffInDays($from);
                                             @endphp
-                                            @if (strtotime($reservation->returned_date) <= strtotime($reservation->return_date))
+                                            {{-- @if (strtotime($reservation->returned_date) <= strtotime($reservation->return_date)) --}}
+                                            @if ($diff_in_days <= 0)
                                                 {{ $diff_in_days }} {{ str_plural('day', $diff_in_days) }}
                                             @else
-                                                @if ($reservation->is_fined == 0)
-                                                    Overdue with {{ $diff_in_days }} {{ str_plural('day', $diff_in_days) }}
-                                                    (No fine)
-                                                @else
-                                                    Overdue with {{ $diff_in_days }} {{ str_plural('day', $diff_in_days) }}
-                                                    (fined: {{ $reservation->fine }})
-                                                @endif
+                                                Overdue with {{ $diff_in_days }} {{ str_plural('day', $diff_in_days) }}
+                                                (fined: {{ $reservation->fine }})
                                             @endif
                                         @endif
 

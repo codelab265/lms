@@ -19,8 +19,8 @@ class AdminReturnController extends Controller
     {
         $returned_books = ReturnedBook::pluck('reservation_id')->all();
         $reservations = Reservation::where('status', 3)
-                                    ->whereIn('id', $returned_books)
-                                    ->get();
+            ->whereIn('id', $returned_books)
+            ->get();
         return view('admin.returned.index', compact('reservations'));
     }
 
@@ -38,9 +38,9 @@ class AdminReturnController extends Controller
         );
         $user = User::find($reservation->user_id);
 
-        $diff_in_days = $to->diffInDays($from);// mao ni 
-        $is_fined = $diff_in_days > 7 ? 1 : 0;
-        $fine = $diff_in_days > 7 ? ($diff_in_days - 7) * 5 : null;
+        $diff_in_days = $to->diffInDays($from); // mao ni 
+        $is_fined = $diff_in_days > 0 ? 1 : 0;
+        $fine = $diff_in_days > 0 ? $diff_in_days * 5 : null;
 
         if ($is_fined == 1) {
             Mail::to($user->email)->send(new FineMail($fine));
@@ -49,7 +49,7 @@ class AdminReturnController extends Controller
         $reservation->update([
             'status' => 3,
             'returned_date' => date('Y-m-d'),
-            'is_fined' => $reservation->user->role == 3 ? 0 :$is_fined ,
+            'is_fined' => $reservation->user->role == 3 ? 0 : $is_fined,
             'fine' => $reservation->user->role == 3 ? 0 : $fine,
         ]);
 
