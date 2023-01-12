@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccessNumber;
+use App\Models\Book;
 use App\Models\LostBook;
+use App\Models\Reservation;
+use App\Models\StudentDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -23,9 +27,10 @@ class LostController extends Controller
         }
 
         $users = User::where('role', 2)->get();
+        $books = Book::all();
 
 
-        return view('admin.lost.index', compact('users', 'lost_books'));
+        return view('admin.lost.index', compact('users', 'lost_books', 'books'));
     }
 
     /**
@@ -46,7 +51,10 @@ class LostController extends Controller
      */
     public function store(Request $request)
     {
-        LostBook::create($request->all());
+        $data = $request->all();
+        $book = Book::find($request->book_title);
+        $data['book_title'] = $book->title;
+        LostBook::create($data);
         return back()->with('success', 'Added successfully');
     }
 
@@ -93,5 +101,23 @@ class LostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function access_number(Request $request)
+    {
+        $id = $request->id;
+        $access_numbers = AccessNumber::where('book_id', $id)->get();
+        $html = view('admin.lost.access_number', compact('access_numbers'))->render();
+        return response()->json($html);
+    }
+
+    public function course(Request $request)
+    {
+        $id = $request->id;
+        $studentDetail = StudentDetail::where('user_id', $id)->first();
+        $course = $studentDetail->course;
+        $data['course'] = $course;
+        $data['year'] = $studentDetail->level;
+        return response()->json($data);
     }
 }

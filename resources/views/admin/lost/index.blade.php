@@ -106,5 +106,41 @@
                 $('#date_range_form').submit();
             }
         });
+
+        $('body').on('change', '#student_id', function() {
+            var user_id = $(this).val();
+            if (user_id != "") {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('admin.lostbooks.course') }}",
+                    data: {
+                        id: user_id
+                    },
+                    success: function(response) {
+                        $('#course').val(response.course + "/" + response.year)
+                    }
+                });
+            } else {
+                return false
+            }
+        });
+
+        $('body').on('change', '#book_title', function() {
+            var book_id = $(this).val();
+            if (book_id != "") {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('admin.lostbooks.access_number') }}",
+                    data: {
+                        id: book_id
+                    },
+                    success: function(response) {
+                        $('#access_number').html(response);
+                    }
+                });
+            } else {
+                return false
+            }
+        });
     </script>
 @endpush

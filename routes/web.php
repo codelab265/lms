@@ -112,6 +112,9 @@ Route::group(
         Route::get('lost-books', [LostController::class, 'index'])->name('lostbooks');
         Route::post('lost-books', [LostController::class, 'store']);
 
+        Route::get('lost-books/access_number', [LostController::class, 'access_number'])->name('lostbooks.access_number');
+        Route::get('lost-books/course', [LostController::class, 'course'])->name('lostbooks.course');
+
         //fines payment routes
         Route::get('fines-payments', [FinesController::class, 'index'])->name('finespayments');
         Route::post('fines-payments', [FinesController::class, 'store']);

@@ -16,7 +16,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="user_id">Borrower's name</label>
-                                <select class="form-control" name="user_id" id="user_id" required>
+                                <select class="form-control" name="user_id" id="student_id" required>
+                                    <option value="">Select</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">
                                             {{ $user->studentDetail->fname }} {{ $user->studentDetail->lname }}
@@ -34,8 +35,12 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="book_title">Book title</label>
-                                    <input type="text" name="book_title" id="book_title" class="form-control"
-                                        placeholder="" aria-describedby="helpId" required="true">
+                                    <Select name="book_title" id="book_title" class="form-control" required>
+                                        <option value="">Select</option>
+                                        @foreach ($books as $book)
+                                            <option value="{{ $book->id }}">{{ $book->title }}</option>
+                                        @endforeach
+                                    </Select>
 
                                 </div>
                             </div>
@@ -73,8 +78,9 @@
 
                             <div class="form-group">
                                 <label for="access_number">Access Number</label>
-                                <input type="number" name="access_number" id="access_number" class="form-control"
-                                    placeholder="" aria-describedby="helpId" required>
+                                <select name="access_number" id="access_number" class="form-control" required>
+
+                                </select>
 
                             </div>
 
