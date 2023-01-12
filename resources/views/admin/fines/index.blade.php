@@ -118,6 +118,7 @@
                 });
 
             }
+
         })
 
         $('body').on('change', '#date_range', function() {
@@ -126,5 +127,26 @@
                 $('#date_range_form').submit();
             }
         })
+
+        $('body').on('change', '#reservation_id', function() {
+            var id = $(this).val();
+            if (id != "") {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('admin.fines.reservation.details') }}",
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        $("#book_title").val(response.book);
+                        $("#course").val(response.course + "/" + response.year);
+                        $("#access_number").val(response.access_number);
+                        $("#amount_to_pay").val(response.amount_to_pay);
+                    }
+                });
+            } else {
+                return false
+            }
+        });
     </script>
 @endpush

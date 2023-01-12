@@ -38,4 +38,21 @@ class FinesController extends Controller
         $fines_payments = FinesPayment::whereDate('created_at', $request->date)->get();
         return view('admin.fines.index', compact('fines_payments', 'users'));
     }
+
+    public function details(Request $request)
+    {
+        $id = $request->id;
+
+        $reservation = Reservation::find($id);
+
+        $data['book-id'] = $reservation->book_id;
+        $data['book'] = $reservation->book->title;
+        $data['course'] = $reservation->user->studentDetail->course;
+        $data['year'] = $reservation->user->studentDetail->level;
+        $data['access_number'] = $reservation->access_number;
+        $data['amount_to_pay'] = $reservation->fine;
+
+
+        return response()->json($data);
+    }
 }

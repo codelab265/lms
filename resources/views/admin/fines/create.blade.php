@@ -88,6 +88,19 @@
                         <div class="col-md-12">
 
                             <div class="form-group">
+                                <label for="amount_paid">Amount to be paid</label>
+                                <input type="number" id="amount_to_pay" class="form-control" placeholder=""
+                                    aria-describedby="helpId" readonly>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+
+                            <div class="form-group">
                                 <label for="amount_paid">Amount Paid</label>
                                 <input type="number" name="amount_paid" id="amount_paid" class="form-control"
                                     placeholder="" aria-describedby="helpId" required>
