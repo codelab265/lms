@@ -53,10 +53,10 @@
                                     <td>{{ $reservation->book->title }}</td>
 
                                     <td>
-                                        @if($reservation->user->role == 3)
-                                        <span class="text-warning">N/A</span>
+                                        @if ($reservation->user->role == 3)
+                                            <span class="text-warning">N/A</span>
                                         @else
-                                        {{ date('d-F-Y', strtotime($reservation->return_date)) }}
+                                            {{ date('d-F-Y', strtotime($reservation->return_date)) }}
                                         @endif
                                     </td>
                                     <td>
@@ -72,9 +72,7 @@
                                     </td>
 
                                     <td>
-                                        @if ($reservation->status == 0
-                                            || $reservation->status == 2
-                                            || $reservation->status == 1)
+                                        @if ($reservation->status == 0 || $reservation->status == 2 || $reservation->status == 1)
                                             <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#delete{{ $id }}">
                                                 <i class="fa fa-trash"></i>
@@ -103,9 +101,58 @@
     <script>
         var book;
         var author;
-        $(document).ready(function(){
+        $(document).ready(function() {
 
-            @if($errors->any())
+            $('body').on('click', '.search_result', function() {
+                var title = $(this).data('title');
+                var categoryID = $(this).data('categoryid');
+                var category = $(this).data('category');
+                var author = $(this).data('author');
+                var access = $(this).data('access');
+                var id = $(this).attr('id');
+
+                var accessNumbers = []
+                $.each(access, function(index, value) {
+                    accessNumbers += '<option>' + value.access_number +
+                        '</option>'
+                });
+
+                $('#search_query').val(title);
+                $('#access_number').html(accessNumbers);
+                $('#category_id').html("<option value='" + categoryID + "'>" + category + "</option>");
+                $('#book_id').html("<option value='" + id + "'>" + title + "</option>");
+                $('#author').html("<option>" + author + "</option>");
+
+            });
+
+            $("#search_query").keyup(function() {
+                var query = $(this).val();
+                if (query != "") {
+                    $.ajax({
+                        url: '{{ route('members.book.search') }}',
+                        method: 'GET',
+                        data: {
+                            search: query
+                        },
+                        success: function(data) {
+
+                            $('#search_container').html(data);
+                            $('#search_container').css('display', 'block');
+
+                            $("#search_container").focusout(function() {
+                                $('#search_container').css('display', 'none');
+                            });
+                            $("#search_query").focusin(function() {
+                                $('#search_container').css('display', 'block');
+                            });
+                        }
+                    });
+                } else {
+                    $('#search_container').css('display', 'none');
+                }
+            });
+
+            @if ($errors->any())
                 @foreach ($errors->all() as $error)
                     Swal.fire({
                         title: "Error!",
@@ -119,12 +166,30 @@
 
 
 
-            $(document).on('click', '#category_id', function(){
-                $('#book_id').empty();
-                $('#access_number').empty();
-                $('#author').empty();
+            $('body').on('change', '#category_id', function() {
+                var category_id = $(this).val();
+                $.ajax({
+                    type: "get",
+                    url: "{{ route('get_book') }}",
+                    data: {
+                        id: category_id
+                    },
+                    success: function(response) {
+                        var data = [];
+                        $('#book_id').html('');
+                        $.each(response, function(index, value) {
+                            data += '<option value="' + value.id + '">' + value.title +
+                                '</option>'
+                        });
+
+                        $('#book_id').append(data)
+                        $('#book_id').append(data)
+                    }
+                });
             })
+
             $('body').on('change', '#book_id', function() {
+
                 var book_id = $(this).val();
                 $.ajax({
                     type: "get",
@@ -139,71 +204,88 @@
                         });
 
                         $('#access_number').html(data)
+
                     }
                 });
             })
-            books = $('#book_id').select2({
-                placeholder: 'Select a book name',
-                dropdownParent: "#add",
-                allowClear: true,
-                ajax: {
-                    url: "{{route('post_get_book')}}",
-                    method: "POST",
-                    data: function(term, page){
-                        return {
-                            q: term, // search term
-                            author: $('#author').val(),
-                            category_id: $('#category_id').val(),
-                            "_token": $('meta[name="_token"]').attr("content"),
-                        };
-                    },
-                    dataType: 'json',
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data, function (book) {
-                                return {
-                                    id: book.id,
-                                    text: book.title
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
-            author = $('#author').select2({
-                placeholder: 'Select an author name',
-                dropdownParent: "#add",
-                allowClear: true,
-                ajax: {
-                    url: "{{route('post_get_author')}}",
-                    method: "POST",
-                    data: function(term, page){
-                        return {
-                            q: term, // search term
-                            category_id: $('#category_id').val(),
-                            book_id: $('#book_id').val(),
-                            "_token": $('meta[name="_token"]').attr("content"),
-                        };
-                    },
-                    dataType: 'json',
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data, function (book) {
-                                return {
-                                    id: book.author,
-                                    text: book.author
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
+            // $('body').on('change', '#book_id', function() {
+            //     var book_id = $(this).val();
+            //     $.ajax({
+            //         type: "get",
+            //         url: "{{ route('get_access_number') }}",
+            //         data: {
+            //             id: book_id
+            //         },
+            //         success: function(response) {
+            //             var data = [];
+            //             $.each(response, function(index, value) {
+            //                 data += '<option>' + value.access_number + '</option>'
+            //             });
+
+            //             $('#access_number').html(data)
+            //         }
+            //     });
+            // })
+            // books = $('#book_id').select2({
+            //     placeholder: 'Select a book name',
+            //     dropdownParent: "#add",
+            //     allowClear: true,
+            //     ajax: {
+            //         url: "{{ route('post_get_book') }}",
+            //         method: "POST",
+            //         data: function(term, page) {
+            //             return {
+            //                 q: term, // search term
+            //                 author: $('#author').val(),
+            //                 category_id: $('#category_id').val(),
+            //                 "_token": $('meta[name="_token"]').attr("content"),
+            //             };
+            //         },
+            //         dataType: 'json',
+            //         processResults: function(data) {
+            //             return {
+            //                 results: $.map(data, function(book) {
+            //                     return {
+            //                         id: book.id,
+            //                         text: book.title
+            //                     }
+            //                 })
+            //             };
+            //         },
+            //         cache: true
+            //     }
+            // });
+            // author = $('#author').select2({
+            //     placeholder: 'Select an author name',
+            //     dropdownParent: "#add",
+            //     allowClear: true,
+            //     ajax: {
+            //         url: "{{ route('post_get_author') }}",
+            //         method: "POST",
+            //         data: function(term, page) {
+            //             return {
+            //                 q: term, // search term
+            //                 category_id: $('#category_id').val(),
+            //                 book_id: $('#book_id').val(),
+            //                 "_token": $('meta[name="_token"]').attr("content"),
+            //             };
+            //         },
+            //         dataType: 'json',
+            //         processResults: function(data) {
+            //             return {
+            //                 results: $.map(data, function(book) {
+            //                     return {
+            //                         id: book.author,
+            //                         text: book.author
+            //                     }
+            //                 })
+            //             };
+            //         },
+            //         cache: true
+            //     }
+            // });
 
 
         })
-
-
     </script>
 @endpush

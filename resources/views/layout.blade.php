@@ -35,6 +35,10 @@
     <!-- Responsive datatable examples -->
     <link href="{{ asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}"
         rel="stylesheet" type="text/css" />
+    <link rel="stylesheet"
+        href="{{ url('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css') }}"
+        integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <!--All Vertical Pages-->
@@ -295,18 +299,18 @@
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li>
-                                        <a href="{{ route('admin.report.books_history', 'semeter') }}">
+                                        <a href="{{ route('admin.report.books_history', 'semester') }}">
                                             Books History
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.report.added_books', 'semeter') }}">
+                                        <a href="{{ route('admin.report.added_books', 'semester') }}">
                                             Books Added
                                         </a>
                                     </li>
 
                                     <li>
-                                        <a href="{{ route('admin.report.updated_books', 'semeter') }}">
+                                        <a href="{{ route('admin.report.updated_books', 'semester') }}">
                                             Books Updated
                                         </a>
                                     </li>
@@ -603,6 +607,9 @@
     <script src="{{ asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatables.net-buttons/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ url('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js') }}"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Responsive examples -->
     <script src="{{ asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
@@ -637,6 +644,8 @@
             $('#logoutButton').click(function() {
                 $('#logoutForm').submit();
             })
+
+            $('.select2').select2();
         })
     </script>
     <script type="text/javascript">

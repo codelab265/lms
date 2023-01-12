@@ -39,13 +39,13 @@ class ReportController extends Controller
             $books = $query->whereBetween('re.updated_at', [
                 $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                 $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-            ])->get();
+            ])->whereYear('re.created_at', date('Y'))->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
-            $books = $query->whereMonth('re.updated_at', date('m'))->get();
+            $books = $query->whereMonth('re.created_at', date('m'))->whereYear('re.created_at', date('Y'))->get();
             $period = 'Monthly';
         } elseif ($period == 'semester') {
-            $books = $query->whereYear('re.updated_at', date('Y'))
+            $books = $query->whereYear('re.created_at', date('Y'))
                 ->get();
             $period = 'Semeter';
         } else {
@@ -67,10 +67,10 @@ class ReportController extends Controller
             $books = Book::whereBetween('created_at', [
                 $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                 $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-            ])->get();
+            ])->whereYear('created_at', date('Y'))->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
-            $books = Book::whereMonth('created_at', date('m'))->get();
+            $books = Book::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->get();
             $period = 'Monthly';
         } elseif ($period == 'semester') {
             $books = Book::whereYear('created_at', date('Y'))->get();
@@ -92,10 +92,10 @@ class ReportController extends Controller
             $books = Book::whereBetween('updated_at', [
                 $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                 $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-            ])->get();
+            ])->whereYear('created_at', date('Y'))->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
-            $books = Book::whereMonth('updated_at', date('m'))->get();
+            $books = Book::whereMonth('updated_at', date('m'))->whereYear('created_at', date('Y'))->get();
             $period = 'Monthly';
         } elseif ($period == 'semester') {
             $books = Book::whereYear('updated_at', date('Y'))->get();
@@ -119,13 +119,13 @@ class ReportController extends Controller
                 ->whereBetween('created_at', [
                     $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                     $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-                ])
+                ])->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
             $reservations = Reservation::where('status', 1)
                 ->orWhere('status', 3)
-                ->whereMonth('created_at', date('m'))
+                ->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Monthly';
         } elseif ($period == 'semester') {
@@ -159,14 +159,14 @@ class ReportController extends Controller
             })->whereBetween('updated_at', [
                 $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                 $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-            ])
+            ])->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
             $reservations = Reservation::where(function ($q) {
                 $q->where('status', 1);
                 $q->orWhere('status', 3);
-            })->whereMonth('updated_at', date('m'))
+            })->whereMonth('updated_at', date('m'))->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Monthly';
         } elseif ($period == 'semester') {
@@ -203,13 +203,13 @@ class ReportController extends Controller
                 ->whereBetween('updated_at', [
                     $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                     $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-                ])
+                ])->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
             $reservations = Reservation::where('status', 3)
                 ->whereIn('id', $returned_books)
-                ->whereMonth('updated_at', date('m'))
+                ->whereMonth('updated_at', date('m'))->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Monthly';
         } elseif ($period == "semester") {
@@ -243,13 +243,13 @@ class ReportController extends Controller
                 ->whereBetween('updated_at', [
                     $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                     $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-                ])
+                ])->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
             $reservations = Reservation::where('status', 3)
                 ->whereNotIn('id', $returned_books)
-                ->whereMonth('updated_at', date('m'))
+                ->whereMonth('updated_at', date('m'))->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Monthly';
         } elseif ($period == 'semester') {
@@ -282,13 +282,13 @@ class ReportController extends Controller
                 ->whereBetween('updated_at', [
                     $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                     $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-                ])
+                ])->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
             $reservations = Reservation::where('status', 3)
                 ->where('is_fined', 1)
-                ->whereMonth('updated_at', date('m'))
+                ->whereMonth('updated_at', date('m'))->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Monthly';
         } elseif ($period == 'semester') {
@@ -316,10 +316,10 @@ class ReportController extends Controller
             $users = User::whereBetween('created_at', [
                 $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                 $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-            ])->get();
+            ])->whereYear('created_at', date('Y'))->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
-            $users = User::whereMonth('created_at', date('m'))->get();
+            $users = User::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->get();
             $period = 'Monthly';
         } elseif ($period == 'semester') {
             $users = User::whereYear('created_at', date('Y'))->get();
@@ -343,14 +343,14 @@ class ReportController extends Controller
                 ->whereBetween('created_at', [
                     $now->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),
                     $now->endOfWeek(Carbon::SATURDAY)->format('Y-m-d'),
-                ])
+                ])->whereYear('created_at', date('Y'))
                 ->get();
             $period = 'Weekly';
         } elseif ($period == 'monthly') {
             $reservations = Reservation::select('user_id', DB::raw('count(*) as total'))->groupBy('user_id')
                 ->orderByRaw('COUNT(*) DESC')
                 ->whereIn('status', [1, 3])
-                ->whereMonth('created_at', date('m'))
+                ->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))
                 ->get();
 
             $period = 'Monthly';

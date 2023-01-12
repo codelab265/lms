@@ -188,6 +188,7 @@ Route::group(
         Route::get('payment-history', [PaymentHistoryController::class, 'index'])->name('payment.history');
 
         Route::get('borrowed-books', [MemberBorrowedController::class, 'index'])->name('borrowed');
+        Route::get('books/search', [MemberBorrowedController::class, 'search'])->name('book.search');
     }
 );
 

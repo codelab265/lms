@@ -5,8 +5,6 @@
         @csrf
         <input type="hidden" name="user_id" value="{{ Auth()->user()->id }}" />
 
-        
-
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
@@ -14,6 +12,20 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+
+                                <input type="text" name="" id="search_query" class="form-control"
+                                    placeholder="search" aria-describedby="helpId">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="search_container" style="z-index: 50">
+
+                    </div>
+                    <hr>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -35,22 +47,21 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="book_id">Book</label>
-                                <select class="form-control" style="width: 100%" name="book_id" id="book_id"> 
-                                    
+                                <select class="form-control" style="width: 100%" name="book_id" id="book_id">
+
                                 </select>
-                                
+
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="author">Author</label>
-                                <select class="form-control" style="width: 100%" name="author" id="author"> 
-                                    
+                                <select class="form-control" style="width: 100%" name="author" id="author">
+
                                 </select>
-                                
+
                             </div>
                         </div>
-                        
 
                         {{-- <div class="col-md-12">
                             <div class="form-group">
